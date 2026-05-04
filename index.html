@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PALANTIR · INTELLIGENCE BRIEF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Pure dark palette — no gradients, no neon */
+  --bg:        #0a0a0a;
+  --bg-2:      #111111;
+  --panel:     #0f0f0f;
+  --rule:      #1f1f1f;
+  --rule-bright: #2a2a2a;
+  --ink:       #e8e6e1;
+  --ink-2:     #a8a8a3;
+  --ink-3:     #585855;
+  --ink-4:     #3a3a37;
+  --amber:     #ff8c1a;
+  --amber-dim: #c46a13;
+  --green:     #5fcf80;
+  --red:       #e85d5d;
+
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --mono:  'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --sans:  'Inter', -apple-system, sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { background: var(--bg); color: var(--ink); }
+
+body {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.55;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  cursor: default;
+}
+
+/* ── film grain — very subtle ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255,140,26,.02) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255,140,26,.015) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* hairline scanlines, barely visible */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,.008) 3px, rgba(255,255,255,.008) 4px);
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: overlay;
+}
+
+/* ═══ ANIMATIONS ══════════════════════════════════ */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes scrollUp { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+
+/* ═══ LAYOUT ══════════════════════════════════ */
+.shell {
+  position: relative;
+  z-index: 10;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 80px 32px 32px;
+  /* extra right padding for the vertical tickertape */
+}
+
+@media (max-width: 760px) {
+  .shell { padding: 24px 20px; }
+}
+
+/* ═══ TICKERTAPE — vertical scrolling on right edge ══════ */
+.tape {
+  position: fixed;
+  right: 0; top: 0;
+  width: 50px;
+  height: 100vh;
+  background: var(--bg-2);
+  border-left: 1px solid var(--rule);
+  z-index: 50;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 760px) { .tape { display: none; } }
+
+.tape-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  animation: scrollUp 60s linear infinite;
+}
+.tape-inner span { display: block; padding: 8px 0; }
+.tape-inner .up { color: var(--green); }
+.tape-inner .dn { color: var(--red); }
+
+/* ═══ TOP META BAR ═══ */
+.meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--ink-3);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 32px;
+  text-transform: uppercase;
+  animation: fadeIn .5s ease forwards;
+}
+.meta-bar .live {
+  color: var(--amber);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.meta-bar .live .dot {
+  width: 5px; height: 5px;
+  background: var(--amber);
+  border-radius: 50%;
+  animation: blink 1.6s ease-in-out infinite;
+}
+
+/* ═══ HEADER / TITLE ═══ */
+.title-block {
+  margin-bottom: 40px;
+  animation: fadeUp .7s ease forwards;
+}
+.title-block .pre {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--amber);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.title-block h1 {
+  font-family: var(--serif);
+  font-size: clamp(56px, 9vw, 112px);
+  font-weight: 500;
+  line-height: .92;
+  color: var(--ink);
+  letter-spacing: -.015em;
+  margin-bottom: 12px;
+}
+.title-block h1 em {
+  font-style: italic;
+  color: var(--amber);
+  font-weight: 400;
+}
+.title-block .subtitle {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+
+/* ═══ ASCII RULE ═══ */
+.ascii-rule {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 2px;
+  margin: 36px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: fadeIn .5s ease forwards;
+}
+.ascii-rule::before, .ascii-rule::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+.ascii-rule .label {
+  color: var(--amber);
+  letter-spacing: 4px;
+  font-size: 9px;
+  text-transform: uppercase;
+}
+.ascii-rule .diamond {
+  color: var(--amber-dim);
+  font-size: 8px;
+}
+
+/* ═══ STOCK HERO — the showpiece ═══ */
+.stock-hero {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 0;
+  border: 1px solid var(--rule-bright);
+  background: var(--panel);
+  margin-bottom: 32px;
+  animation: fadeUp .8s .15s ease forwards;
+  opacity: 0;
+  position: relative;
+}
+.stock-hero::before {
+  content: 'NASDAQ : PLTR · LIVE QUOTE';
+  position: absolute;
+  top: 12px; left: 16px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+
+@media (max-width: 760px) {
+  .stock-hero { grid-template-columns: 1fr; }
+}
+
+.hero-left {
+  padding: 44px 32px 28px;
+  border-right: 1px solid var(--rule);
+}
+@media (max-width: 760px) {
+  .hero-left { border-right: none; border-bottom: 1px solid var(--rule); }
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+.price-big {
+  font-family: var(--serif);
+  font-size: clamp(56px, 8vw, 92px);
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+}
+.price-change {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: .5px;
+}
+.price-change.up { color: var(--green); }
+.price-change.dn { color: var(--red); }
+
+.price-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--rule);
+}
+@media (max-width: 580px) {
+  .hero-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+.hero-stat .lbl {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.hero-stat .val {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.hero-stat .val.up { color: var(--green); }
+.hero-stat .val.dn { color: var(--red); }
+
+.hero-right {
+  padding: 32px 24px 24px;
+  display: flex;
+  flex-direction: column;
+}
+.spark-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.spark-svg { width: 100%; flex: 1; min-height: 120px; }
+
+/* ═══ KEY METRICS ROW ═══ */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid var(--rule-bright);
+  background: var(--panel);
+  margin-bottom: 32px;
+  animation: fadeUp .7s .25s ease forwards;
+  opacity: 0;
+}
+@media (max-width: 760px) {
+  .metrics-row { grid-template-columns: repeat(2, 1fr); }
+}
+.mrow {
+  padding: 22px 20px;
+  border-right: 1px solid var(--rule);
+  text-align: left;
+}
+.mrow:last-child { border-right: none; }
+@media (max-width: 760px) {
+  .mrow:nth-child(2n) { border-right: none; }
+  .mrow:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
+}
+.mrow .lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.mrow .val {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -.015em;
+}
+.mrow .sub {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--ink-3);
+  margin-top: 6px;
+  letter-spacing: 1px;
+}
+
+/* ═══ STATIC BRIEF — three columns ═══ */
+.brief {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+  animation: fadeUp .7s .35s ease forwards;
+  opacity: 0;
+}
+@media (max-width: 900px) { .brief { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 580px) { .brief { grid-template-columns: 1fr; } }
+
+.col {
+  border: 1px solid var(--rule);
+  background: var(--panel);
+  padding: 22px;
+}
+
+.col-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--amber);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.col-tag::before {
+  content: '◇';
+  color: var(--amber-dim);
+  font-size: 9px;
+}
+
+.col h3 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 16px;
+  letter-spacing: -.005em;
+}
+
+.product {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.product:last-child { border-bottom: none; }
+.product .name {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: .5px;
+  margin-bottom: 4px;
+}
+.product .desc {
+  font-size: 11px;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
+.contract-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.contract-row:last-child { border-bottom: none; }
+.contract-row .name {
+  font-size: 12px;
+  color: var(--ink);
+}
+.contract-row .name small {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--ink-3);
+  letter-spacing: 1px;
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+.contract-row .val {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--amber);
+  font-weight: 500;
+}
+
+.fin-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.fin-row:last-child { border-bottom: none; }
+.fin-row .lbl { color: var(--ink-2); }
+.fin-row .val { color: var(--ink); font-weight: 500; }
+.fin-row .val.amber { color: var(--amber); }
+.fin-row .val.green { color: var(--green); }
+
+/* ═══ BULL / BEAR ═══ */
+.bb {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+  animation: fadeUp .7s .45s ease forwards;
+  opacity: 0;
+}
+@media (max-width: 760px) { .bb { grid-template-columns: 1fr; } }
+
+.bb-side {
+  border: 1px solid var(--rule);
+  padding: 22px;
+}
+.bb-bull { background: rgba(95, 207, 128, .025); border-color: rgba(95, 207, 128, .15); }
+.bb-bear { background: rgba(232, 93, 93, .025); border-color: rgba(232, 93, 93, .15); }
+
+.bb-side h4 {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 14px;
+  font-style: italic;
+}
+.bb-bull h4 { color: var(--green); }
+.bb-bear h4 { color: var(--red); }
+
+.bb-side ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.bb-side li {
+  font-size: 12px;
+  color: var(--ink);
+  line-height: 1.55;
+  padding-left: 16px;
+  position: relative;
+}
+.bb-side li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  font-family: var(--mono);
+}
+.bb-bull li::before { color: var(--green); }
+.bb-bear li::before { color: var(--red); }
+
+/* ═══ LIVE FEEDS GRID ═══ */
+.feeds-1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+  animation: fadeUp .7s .55s ease forwards;
+  opacity: 0;
+}
+.feeds-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+  animation: fadeUp .7s .6s ease forwards;
+  opacity: 0;
+}
+.feeds-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+  animation: fadeUp .7s .65s ease forwards;
+  opacity: 0;
+}
+@media (max-width: 1100px) {
+  .feeds-1, .feeds-2, .feeds-3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 620px) {
+  .feeds-1, .feeds-2, .feeds-3 { grid-template-columns: 1fr; }
+}
+
+.feed {
+  border: 1px solid var(--rule);
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+  max-height: 400px;
+}
+.feed-head {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.feed-head .lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  color: var(--amber);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.feed-head .ind {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--ink-4);
+  transition: all .3s;
+  flex-shrink: 0;
+}
+.feed-head .ind.on  { background: var(--green); box-shadow: 0 0 6px rgba(95,207,128,.5); }
+.feed-head .ind.err { background: var(--red); }
+.feed-head .ind.spin { background: var(--amber); animation: blink .8s ease-in-out infinite; }
+
+.feed-head .count {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--ink-3);
+  letter-spacing: 1px;
+}
+
+.feed-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px;
+}
+.feed-body::-webkit-scrollbar { width: 2px; }
+.feed-body::-webkit-scrollbar-track { background: transparent; }
+.feed-body::-webkit-scrollbar-thumb { background: var(--rule-bright); }
+
+.item {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--rule);
+  animation: fadeIn .3s ease forwards;
+}
+.item:last-child { border-bottom: none; }
+
+.item-meta {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  color: var(--ink-3);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  text-transform: uppercase;
+}
+.tag {
+  font-family: var(--mono);
+  font-size: 8px;
+  padding: 1px 5px;
+  border: 1px solid;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.tag-news     { border-color: var(--amber); color: var(--amber); }
+.tag-contract { border-color: var(--green); color: var(--green); }
+.tag-github   { border-color: #c8c8c8; color: #c8c8c8; }
+.tag-wiki     { border-color: var(--ink-2); color: var(--ink-2); }
+.tag-spending { border-color: var(--amber); color: var(--amber); }
+.tag-filing   { border-color: var(--green); color: var(--green); }
+.tag-insider  { border-color: var(--red); color: var(--red); }
+
+.item-title {
+  font-size: 12px;
+  color: var(--ink);
+  font-weight: 400;
+  line-height: 1.45;
+  margin-bottom: 4px;
+}
+.item-title a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--ink-4);
+  transition: all .15s;
+}
+.item-title a:hover {
+  color: var(--amber);
+  border-bottom-color: var(--amber);
+}
+.item-body {
+  font-size: 11px;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+.item-val {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--amber);
+  margin-top: 4px;
+  letter-spacing: .5px;
+  font-weight: 500;
+}
+
+.empty {
+  padding: 40px 16px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--ink-3);
+  letter-spacing: 1px;
+  line-height: 1.8;
+  text-transform: uppercase;
+}
+.spinner {
+  width: 18px; height: 18px;
+  border: 1px solid var(--rule-bright);
+  border-top-color: var(--amber);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  margin: 0 auto 12px;
+}
+
+/* ═══ FOOTER ═══ */
+.footer {
+  border-top: 1px solid var(--rule);
+  padding: 22px 0 12px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  animation: fadeIn 1s .8s ease forwards;
+  opacity: 0;
+}
+
+/* ═══ CONFIG INPUT ═══ */
+.cfg {
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  border: 1px solid var(--rule);
+  background: var(--panel);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  animation: fadeIn .5s .1s ease forwards;
+  opacity: 0;
+}
+.cfg-lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+.cfg input {
+  flex: 1;
+  min-width: 240px;
+  font-family: var(--mono);
+  font-size: 10px;
+  background: var(--bg);
+  border: 1px solid var(--rule-bright);
+  color: var(--ink);
+  padding: 7px 10px;
+  letter-spacing: .5px;
+}
+.cfg input:focus { outline: none; border-color: var(--amber); }
+.cfg button {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  background: transparent;
+  border: 1px solid var(--amber);
+  color: var(--amber);
+  padding: 7px 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all .2s;
+}
+.cfg button:hover { background: var(--amber); color: var(--bg); }
+.cfg button:disabled { opacity: .4; cursor: not-allowed; }
+.cfg-status {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--ink-3);
+  letter-spacing: 1px;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ VERTICAL TICKERTAPE on right edge ═══ -->
+<div class="tape">
+  <div class="tape-inner" id="tape-inner">
+    <span>PLTR · LIVE</span>
+    <span class="up">▲ +0.00</span>
+    <span>NASDAQ</span>
+    <span>VOL — </span>
+    <span class="up">52WK HIGH 207.52</span>
+    <span class="dn">52WK LOW 105.32</span>
+    <span>MKTCAP 345B</span>
+    <span>P/E 227</span>
+    <span>EPS 0.63</span>
+    <span class="up">PLTR · LIVE</span>
+    <span class="up">▲ +0.00</span>
+    <span>NASDAQ</span>
+    <span>VOL — </span>
+    <span class="up">52WK HIGH 207.52</span>
+    <span class="dn">52WK LOW 105.32</span>
+    <span>MKTCAP 345B</span>
+    <span>P/E 227</span>
+    <span>EPS 0.63</span>
+  </div>
+</div>
+
+<div class="shell">
+
+  <!-- ═══ META BAR ═══ -->
+  <div class="meta-bar">
+    <span>INTELLIGENCE BRIEF · VOL. 01 · ISSUE 02</span>
+    <span class="live"><span class="dot"></span><span id="utc-clock">— UTC</span></span>
+  </div>
+
+  <!-- ═══ TITLE BLOCK ═══ -->
+  <div class="title-block">
+    <div class="pre">◇ NASDAQ : PLTR · INSTITUTIONAL RESEARCH</div>
+    <h1>Palantir<br><em>Technologies</em></h1>
+    <div class="subtitle">// COMMERCIAL & DEFENSE AI · FOUNDED 2003 · ALEX KARP, CEO</div>
+  </div>
+
+  <!-- ═══ BACKEND CONFIG ═══ -->
+  <div class="cfg">
+    <span class="cfg-lbl">BACKEND</span>
+    <input type="text" id="backend" placeholder="https://palantir-backend.onrender.com">
+    <button id="btn-sync">▶ SYNC</button>
+    <button id="btn-refresh" disabled>↻ REFRESH</button>
+    <span class="cfg-status" id="cfg-status">Awaiting sync…</span>
+  </div>
+
+  <!-- ═══ STOCK HERO ═══ -->
+  <div class="stock-hero">
+    <div class="hero-left">
+      <div class="price-row">
+        <div class="price-big" id="price-big">———</div>
+        <div class="price-change" id="price-change">— · —</div>
+      </div>
+      <div class="price-meta" id="price-meta">// AWAITING DATA · STOOQ.COM</div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="lbl">DAY OPEN</div>
+          <div class="val" id="day-open">—</div>
+        </div>
+        <div class="hero-stat">
+          <div class="lbl">DAY HIGH</div>
+          <div class="val" id="day-high">—</div>
+        </div>
+        <div class="hero-stat">
+          <div class="lbl">DAY LOW</div>
+          <div class="val" id="day-low">—</div>
+        </div>
+        <div class="hero-stat">
+          <div class="lbl">VOLUME</div>
+          <div class="val" id="day-vol">—</div>
+        </div>
+        <div class="hero-stat">
+          <div class="lbl">52W RANGE</div>
+          <div class="val" id="range-52w">—</div>
+        </div>
+        <div class="hero-stat">
+          <div class="lbl">30D CHANGE</div>
+          <div class="val" id="chg-30d">—</div>
+        </div>
+        <div class="hero-stat">
+          <div class="lbl">1Y CHANGE</div>
+          <div class="val" id="chg-1y">—</div>
+        </div>
+        <div class="hero-stat">
+          <div class="lbl">EARNINGS</div>
+          <div class="val" style="color:var(--amber)">May 4 2026</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="spark-label">◇ 60-DAY PRICE</div>
+      <svg class="spark-svg" id="spark" viewBox="0 0 280 140" preserveAspectRatio="none">
+        <text x="140" y="75" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#585855" letter-spacing="2">AWAITING DATA</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ═══ KEY METRICS ROW ═══ -->
+  <div class="metrics-row">
+    <div class="mrow">
+      <div class="lbl">MARKET CAP</div>
+      <div class="val">$345B</div>
+      <div class="sub">36th MOST VALUABLE</div>
+    </div>
+    <div class="mrow">
+      <div class="lbl">P/E TTM</div>
+      <div class="val">227.4</div>
+      <div class="sub">PRICED FOR PERFECTION</div>
+    </div>
+    <div class="mrow">
+      <div class="lbl">REVENUE TTM</div>
+      <div class="val">$4.48B</div>
+      <div class="sub">+70% Q4 2025 YoY</div>
+    </div>
+    <div class="mrow">
+      <div class="lbl">2026 GUIDE</div>
+      <div class="val">~$2.2B</div>
+      <div class="sub">+61% IMPLIED</div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION DIVIDER ═══ -->
+  <div class="ascii-rule">
+    <span class="diamond">◇◇◇</span><span class="label">COMPANY OVERVIEW</span><span class="diamond">◇◇◇</span>
+  </div>
+
+  <!-- ═══ THREE-COL STATIC BRIEF ═══ -->
+  <div class="brief">
+
+    <!-- Products -->
+    <div class="col">
+      <div class="col-tag">SOFTWARE PLATFORMS</div>
+      <h3>Product Portfolio</h3>
+      <div class="product">
+        <div class="name">GOTHAM</div>
+        <div class="desc">Intelligence & defense platform. US Intelligence Community, DoD, allied militaries. Battlefield AI, counterterrorism.</div>
+      </div>
+      <div class="product">
+        <div class="name">FOUNDRY</div>
+        <div class="desc">Commercial enterprise data platform. Ontology layer for Walgreens, Airbus, BP, Stellantis, hundreds of others.</div>
+      </div>
+      <div class="product">
+        <div class="name">AIP</div>
+        <div class="desc">Artificial Intelligence Platform. Orchestrates GPT-4, Claude, Llama over the ontology. Auditable, governed, deployed in days via boot camps.</div>
+      </div>
+      <div class="product">
+        <div class="name">APOLLO</div>
+        <div class="desc">Continuous-delivery platform. Ships Palantir products to submarines, classified networks, and SaaS tenants from one pipeline.</div>
+      </div>
+    </div>
+
+    <!-- Contracts -->
+    <div class="col">
+      <div class="col-tag">FEDERAL CONTRACTS</div>
+      <h3>Major Awards</h3>
+      <div class="contract-row">
+        <div class="name">Maven Smart System<small>DOD · PROGRAM OF RECORD · MAR 2026</small></div>
+        <div class="val">multi-yr</div>
+      </div>
+      <div class="contract-row">
+        <div class="name">DoD large software contract<small>DEPT. OF DEFENSE · 2025</small></div>
+        <div class="val">$795M</div>
+      </div>
+      <div class="contract-row">
+        <div class="name">TITAN program<small>U.S. ARMY · 2024</small></div>
+        <div class="val">$178M</div>
+      </div>
+      <div class="contract-row">
+        <div class="name">Vantage Data Platform<small>U.S. ARMY · MULTI-YR · EXPANDING</small></div>
+        <div class="val">expanding</div>
+      </div>
+      <div class="contract-row">
+        <div class="name">Gotham — ICE renewal<small>U.S. IMMIGRATION · 2025</small></div>
+        <div class="val">renewed</div>
+      </div>
+      <div class="contract-row">
+        <div class="name">DHS / Pentagon contracts (existing)<small>VARIOUS · 2025</small></div>
+        <div class="val">$113M</div>
+      </div>
+      <div class="contract-row">
+        <div class="name">NHS data platform<small>UK · ONGOING</small></div>
+        <div class="val">$330M+</div>
+      </div>
+    </div>
+
+    <!-- Financials -->
+    <div class="col">
+      <div class="col-tag">FINANCIAL METRICS</div>
+      <h3>By the Numbers</h3>
+      <div class="fin-row"><span class="lbl">Q4'25 REV</span><span class="val">$1.4B</span></div>
+      <div class="fin-row"><span class="lbl">Q4'25 GROWTH</span><span class="val green">+70% YoY</span></div>
+      <div class="fin-row"><span class="lbl">US COMMERCIAL</span><span class="val green">+137% YoY</span></div>
+      <div class="fin-row"><span class="lbl">Q4'25 TCV</span><span class="val amber">$4.3B record</span></div>
+      <div class="fin-row"><span class="lbl">EBITDA TTM</span><span class="val">$1.44B</span></div>
+      <div class="fin-row"><span class="lbl">EBITDA MARGIN</span><span class="val">32.2%</span></div>
+      <div class="fin-row"><span class="lbl">GROSS MARGIN</span><span class="val">82.4%</span></div>
+      <div class="fin-row"><span class="lbl">NET MARGIN</span><span class="val">36.5%</span></div>
+      <div class="fin-row"><span class="lbl">SHARES OUT</span><span class="val">2.40B</span></div>
+      <div class="fin-row"><span class="lbl">EMPLOYEES</span><span class="val">~4,430</span></div>
+      <div class="fin-row"><span class="lbl">NEXT EARNINGS</span><span class="val amber">May 4 2026</span></div>
+    </div>
+  </div>
+
+  <!-- ═══ BULL / BEAR ═══ -->
+  <div class="ascii-rule">
+    <span class="diamond">◇◇◇</span><span class="label">INVESTMENT THESIS</span><span class="diamond">◇◇◇</span>
+  </div>
+
+  <div class="bb">
+    <div class="bb-side bb-bull">
+      <h4>Bull case</h4>
+      <ul>
+        <li>Maven Smart System now a DoD program of record — locks in multi-year, pan-military funding</li>
+        <li>AIP boot camps converting commercial AI demand into signed contracts in days, not months</li>
+        <li>Q4 2025 US commercial revenue grew 137% YoY — hypergrowth in the highest-margin segment</li>
+        <li>$4.3B record TCV in Q4 — proves "land-and-expand" at scale, sticky multi-year deals</li>
+        <li>S&P 500 inclusion (2024) drives passive inflows; index funds must own the stock</li>
+        <li>Apollo deploys to submarines and SaaS from one pipeline — moat competitors can't replicate</li>
+        <li>Foundry ontology + AIP = "model orchestrator" position in the AI value chain</li>
+      </ul>
+    </div>
+    <div class="bb-side bb-bear">
+      <h4>Bear case</h4>
+      <ul>
+        <li>P/E of 227 prices in flawless execution for years — any miss could compress multiple sharply</li>
+        <li>Price-to-sales ratio over 80× — historically unsustainable for any software business</li>
+        <li>HSBC downgrade (May 2026) cited "emerging competition" from in-house enterprise AI tools</li>
+        <li>RBC Capital Underperform with $90 price target — implies ~37% downside from current</li>
+        <li>Government revenue concentration creates political/budget cycle risk</li>
+        <li>"Western-aligned" customer policy structurally caps total addressable market</li>
+        <li>Stock down ~19% over trailing 12 months despite revenue acceleration — multiple compression underway</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ LIVE FEEDS — 8 sources ═══ -->
+  <div class="ascii-rule">
+    <span class="diamond">◇◇◇</span><span class="label">LIVE INTELLIGENCE FEEDS · 8 SOURCES</span><span class="diamond">◇◇◇</span>
+  </div>
+
+  <!-- Row 1: News · Filings · Insiders -->
+  <div class="feeds-1">
+    <div class="feed">
+      <div class="feed-head">
+        <div class="lbl"><span class="ind" id="ind-news"></span>BREAKING NEWS</div>
+        <span class="count" id="ct-news">—</span>
+      </div>
+      <div class="feed-body" id="body-news">
+        <div class="empty">Awaiting sync…</div>
+      </div>
+    </div>
+
+    <div class="feed">
+      <div class="feed-head">
+        <div class="lbl"><span class="ind" id="ind-filings"></span>SEC FILINGS</div>
+        <span class="count" id="ct-filings">—</span>
+      </div>
+      <div class="feed-body" id="body-filings">
+        <div class="empty">Awaiting sync…</div>
+      </div>
+    </div>
+
+    <div class="feed">
+      <div class="feed-head">
+        <div class="lbl"><span class="ind" id="ind-insiders"></span>INSIDER TRADES · FORM 4</div>
+        <span class="count" id="ct-insiders">—</span>
+      </div>
+      <div class="feed-body" id="body-insiders">
+        <div class="empty">Awaiting sync…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2: Contracts · Spending · GitHub -->
+  <div class="feeds-2">
+    <div class="feed">
+      <div class="feed-head">
+        <div class="lbl"><span class="ind" id="ind-contracts"></span>SAM.GOV OPPORTUNITIES</div>
+        <span class="count" id="ct-contracts">—</span>
+      </div>
+      <div class="feed-body" id="body-contracts">
+        <div class="empty">Awaiting sync…</div>
+      </div>
+    </div>
+
+    <div class="feed">
+      <div class="feed-head">
+        <div class="lbl"><span class="ind" id="ind-spending"></span>USASPENDING.GOV AWARDS</div>
+        <span class="count" id="ct-spending">—</span>
+      </div>
+      <div class="feed-body" id="body-spending">
+        <div class="empty">Awaiting sync…</div>
+      </div>
+    </div>
+
+    <div class="feed">
+      <div class="feed-head">
+        <div class="lbl"><span class="ind" id="ind-github"></span>GITHUB · PALANTIR</div>
+        <span class="count" id="ct-github">—</span>
+      </div>
+      <div class="feed-body" id="body-github">
+        <div class="empty">Awaiting sync…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 3: Wikipedia · Activity Log · spare -->
+  <div class="feeds-3">
+    <div class="feed">
+      <div class="feed-head">
+        <div class="lbl"><span class="ind" id="ind-wiki"></span>WIKIPEDIA · LIVE EXTRACT</div>
+        <span class="count" id="ct-wiki">—</span>
+      </div>
+      <div class="feed-body" id="body-wiki">
+        <div class="empty">Awaiting sync…</div>
+      </div>
+    </div>
+
+    <div class="feed">
+      <div class="feed-head">
+        <div class="lbl"><span class="ind on"></span>ACTIVITY LOG</div>
+        <span class="count" id="ct-log">0</span>
+      </div>
+      <div class="feed-body" id="body-log"></div>
+    </div>
+
+    <div class="feed">
+      <div class="feed-head">
+        <div class="lbl"><span class="ind on"></span>DATA PROVENANCE</div>
+        <span class="count">8 sources</span>
+      </div>
+      <div class="feed-body">
+        <div style="padding:14px 0;font-family:var(--mono);font-size:10px;line-height:2;color:var(--ink-2);letter-spacing:.5px;">
+          ◇ <span style="color:var(--amber)">NewsAPI</span> · keyed<br>
+          ◇ <span style="color:var(--amber)">SAM.gov</span> · keyed<br>
+          ◇ <span style="color:var(--ink)">GitHub API</span> · open<br>
+          ◇ <span style="color:var(--ink)">Wikipedia REST</span> · open<br>
+          ◇ <span style="color:var(--ink)">USASpending.gov</span> · open<br>
+          ◇ <span style="color:var(--ink)">Stooq · PLTR.US</span> · open<br>
+          ◇ <span style="color:var(--ink)">SEC EDGAR · filings</span> · open<br>
+          ◇ <span style="color:var(--ink)">SEC EDGAR · Form 4</span> · open<br>
+          <br>
+          <span style="color:var(--ink-3);font-size:9px;letter-spacing:1px;">CACHED 1HR · STOCK 5MIN · WIKI 6HR</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <div class="footer">
+    <span>PALANTIR TECHNOLOGIES INC · NASDAQ : PLTR · CIK 0001321655</span>
+    <span>NOT FINANCIAL ADVICE · AUTO-REFRESH 5 MIN · STOCK 5 MIN · WIKI 6 HR</span>
+  </div>
+
+</div><!-- /shell -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+const S = {
+  news: [], contracts: [], github: null, wiki: null, spending: [],
+  quote: null, filings: [], insiders: [], log: []
+};
+const DEFAULT_BACKEND = 'https://palantir-backend.onrender.com';
+
+// ═══════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════
+const ts = () => new Date().toLocaleTimeString();
+const $ = id => document.getElementById(id);
+
+function addLog(msg, type = 'info') {
+  S.log.unshift({ time: ts(), msg, type });
+  if (S.log.length > 40) S.log.pop();
+  renderLog();
+}
+
+function renderLog() {
+  const body = $('body-log');
+  body.innerHTML = S.log.map(e => {
+    const tagClass = e.type === 'ok' ? 'tag-contract' : e.type === 'err' ? 'tag-insider' : e.type === 'warn' ? 'tag-news' : '';
+    return `<div class="item">
+      <div class="item-meta">
+        <span>${e.time}</span>
+        ${e.type !== 'info' ? `<span class="tag ${tagClass}">${e.type}</span>` : ''}
+      </div>
+      <div class="item-body">${e.msg}</div>
+    </div>`;
+  }).join('');
+  $('ct-log').textContent = S.log.length;
+}
+
+function setInd(id, state) {
+  const el = $(id);
+  if (!el) return;
+  el.className = 'ind';
+  if (state) el.classList.add(state);
+}
+
+function loading(bodyId, indId) {
+  $(bodyId).innerHTML = `<div class="empty"><div class="spinner"></div>fetching…</div>`;
+  setInd(indId, 'spin');
+}
+
+function getBackend() {
+  return ($('backend').value.trim() || DEFAULT_BACKEND).replace(/\/$/, '');
+}
+
+async function api(endpoint) {
+  const url = `${getBackend()}${endpoint}`;
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
+
+const fmt = {
+  money: n => n == null ? '—' : '$' + n.toLocaleString('en-US', { maximumFractionDigits: 2 }),
+  big:   n => {
+    if (n == null) return '—';
+    if (n >= 1e9) return '$' + (n/1e9).toFixed(2) + 'B';
+    if (n >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
+    if (n >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
+    return '$' + n.toFixed(0);
+  },
+  pct:   n => n == null ? '—' : (n >= 0 ? '+' : '') + n.toFixed(2) + '%',
+  vol:   n => n == null ? '—' : (n/1e6).toFixed(1) + 'M',
+  date:  s => s ? new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'
+};
+
+// ═══════════════════════════════════════════════════════
+//  STOCK QUOTE — the showpiece
+// ═══════════════════════════════════════════════════════
+async function fetchQuote() {
+  addLog('Fetching live PLTR quote…', 'warn');
+  try {
+    const d = await api('/api/quote');
+    S.quote = d;
+    renderQuote(d);
+    addLog(`Stock quote OK · $${d.latest.price.toFixed(2)}`, 'ok');
+    return 1;
+  } catch (e) {
+    addLog(`Stock quote FAIL: ${e.message}`, 'err');
+    return 0;
+  }
+}
+
+function renderQuote(d) {
+  const up = d.change.oneDay >= 0;
+  $('price-big').textContent = '$' + d.latest.price.toFixed(2);
+  $('price-change').className = 'price-change ' + (up ? 'up' : 'dn');
+  $('price-change').textContent = `${up ? '▲' : '▼'} ${d.change.oneDay >= 0 ? '+' : ''}${d.change.oneDay.toFixed(2)} · ${fmt.pct(d.change.oneDayPct)}`;
+  $('price-meta').textContent = `// AS OF ${fmt.date(d.latest.date)} · STOOQ.COM · CACHED 5 MIN`;
+
+  $('day-open').textContent = '$' + d.latest.open.toFixed(2);
+  $('day-high').textContent = '$' + d.latest.high.toFixed(2);
+  $('day-low').textContent = '$' + d.latest.low.toFixed(2);
+  $('day-vol').textContent = fmt.vol(d.latest.volume);
+  $('range-52w').textContent = `$${d.range52w.low.toFixed(0)}—$${d.range52w.high.toFixed(0)}`;
+
+  const c30 = $('chg-30d');
+  c30.textContent = fmt.pct(d.change.thirtyDayPct);
+  c30.className = 'val ' + (d.change.thirtyDayPct >= 0 ? 'up' : 'dn');
+
+  const c1y = $('chg-1y');
+  c1y.textContent = fmt.pct(d.change.oneYearPct);
+  c1y.className = 'val ' + (d.change.oneYearPct >= 0 ? 'up' : 'dn');
+
+  // Sparkline SVG
+  drawSparkline(d.history);
+
+  // Update tickertape with real values
+  updateTickertape(d);
+}
+
+function drawSparkline(history) {
+  const svg = $('spark');
+  if (!history || history.length < 2) return;
+  const W = 280, H = 140, P = 12;
+  const closes = history.map(h => h.close);
+  const min = Math.min(...closes);
+  const max = Math.max(...closes);
+  const range = max - min || 1;
+
+  const points = history.map((h, i) => {
+    const x = P + (i / (history.length - 1)) * (W - 2 * P);
+    const y = H - P - ((h.close - min) / range) * (H - 2 * P);
+    return [x, y];
+  });
+
+  const linePath = points.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  const areaPath = linePath + ` L${points[points.length-1][0].toFixed(1)},${H-P} L${points[0][0].toFixed(1)},${H-P} Z`;
+
+  const up = closes[closes.length - 1] >= closes[0];
+  const color = up ? '#5fcf80' : '#e85d5d';
+
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="grad" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0%" stop-color="${color}" stop-opacity=".15"/>
+        <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <line x1="${P}" y1="${H/2}" x2="${W-P}" y2="${H/2}" stroke="#1f1f1f" stroke-dasharray="2,3"/>
+    <path d="${areaPath}" fill="url(#grad)"/>
+    <path d="${linePath}" stroke="${color}" stroke-width="1.5" fill="none"/>
+    <circle cx="${points[points.length-1][0].toFixed(1)}" cy="${points[points.length-1][1].toFixed(1)}" r="3" fill="${color}"/>
+    <text x="${P}" y="${H-2}" font-family="JetBrains Mono" font-size="8" fill="#585855">$${min.toFixed(0)}</text>
+    <text x="${P}" y="${P+6}" font-family="JetBrains Mono" font-size="8" fill="#585855">$${max.toFixed(0)}</text>
+  `;
+}
+
+function updateTickertape(d) {
+  const change = d.change.oneDay;
+  const up = change >= 0;
+  const arrow = up ? '▲' : '▼';
+  const cls = up ? 'up' : 'dn';
+  const items = [
+    `<span>PLTR · $${d.latest.price.toFixed(2)}</span>`,
+    `<span class="${cls}">${arrow} ${change >= 0 ? '+' : ''}${change.toFixed(2)}</span>`,
+    `<span class="${cls}">${fmt.pct(d.change.oneDayPct)} · 1D</span>`,
+    `<span>VOL ${fmt.vol(d.latest.volume)}</span>`,
+    `<span class="up">52WK HI $${d.range52w.high.toFixed(0)}</span>`,
+    `<span class="dn">52WK LO $${d.range52w.low.toFixed(0)}</span>`,
+    `<span class="${d.change.thirtyDayPct >= 0 ? 'up' : 'dn'}">${fmt.pct(d.change.thirtyDayPct)} · 30D</span>`,
+    `<span class="${d.change.oneYearPct >= 0 ? 'up' : 'dn'}">${fmt.pct(d.change.oneYearPct)} · 1Y</span>`,
+    `<span>MKTCAP $345B</span>`,
+    `<span>P/E 227</span>`
+  ];
+  // Duplicate for seamless scroll
+  $('tape-inner').innerHTML = items.concat(items).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  NEWS
+// ═══════════════════════════════════════════════════════
+async function fetchNews() {
+  loading('body-news', 'ind-news');
+  try {
+    const d = await api('/api/news');
+    S.news = d.articles || [];
+    renderNews();
+    setInd('ind-news', 'on');
+    $('ct-news').textContent = `${S.news.length} articles`;
+    addLog(`News OK · ${S.news.length} articles`, 'ok');
+    return S.news.length;
+  } catch (e) {
+    $('body-news').innerHTML = `<div class="empty" style="color:var(--red)">${e.message}</div>`;
+    setInd('ind-news', 'err');
+    addLog(`News ERR: ${e.message}`, 'err');
+    return 0;
+  }
+}
+function renderNews() {
+  if (!S.news.length) return $('body-news').innerHTML = '<div class="empty">no articles</div>';
+  $('body-news').innerHTML = S.news.map(a => `
+    <div class="item">
+      <div class="item-meta">
+        <span>${fmt.date(a.publishedAt)}</span>
+        <span class="tag tag-news">${(a.source || 'Source').substring(0, 18)}</span>
+      </div>
+      <div class="item-title"><a href="${a.url}" target="_blank" rel="noopener">${a.title}</a></div>
+      <div class="item-body">${(a.description || '').substring(0, 120)}${(a.description || '').length > 120 ? '…' : ''}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  CONTRACTS (SAM.GOV)
+// ═══════════════════════════════════════════════════════
+async function fetchContracts() {
+  loading('body-contracts', 'ind-contracts');
+  try {
+    const d = await api('/api/contracts');
+    S.contracts = d.opportunities || [];
+    renderContracts();
+    setInd('ind-contracts', 'on');
+    $('ct-contracts').textContent = `${S.contracts.length} opps`;
+    addLog(`SAM.gov OK · ${S.contracts.length}`, 'ok');
+    return S.contracts.length;
+  } catch (e) {
+    $('body-contracts').innerHTML = `<div class="empty" style="color:var(--red)">${e.message}</div>`;
+    setInd('ind-contracts', 'err');
+    addLog(`SAM.gov ERR: ${e.message}`, 'err');
+    return 0;
+  }
+}
+function renderContracts() {
+  if (!S.contracts.length) return $('body-contracts').innerHTML = '<div class="empty">no opportunities</div>';
+  $('body-contracts').innerHTML = S.contracts.map(o => `
+    <div class="item">
+      <div class="item-meta">
+        <span>${fmt.date(o.postedDate)}</span>
+        <span class="tag tag-contract">${(o.department || 'Federal').substring(0, 18)}</span>
+      </div>
+      <div class="item-title">${o.uiLink ? `<a href="${o.uiLink}" target="_blank" rel="noopener">${o.title}</a>` : o.title}</div>
+      ${o.responseDeadLine ? `<div class="item-body">Deadline: ${o.responseDeadLine}</div>` : ''}
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  GITHUB
+// ═══════════════════════════════════════════════════════
+async function fetchGitHub() {
+  loading('body-github', 'ind-github');
+  try {
+    const d = await api('/api/github');
+    S.github = d;
+    renderGitHub();
+    setInd('ind-github', 'on');
+    $('ct-github').textContent = `${(d.repos || []).length} repos`;
+    addLog(`GitHub OK · ${(d.repos || []).length}`, 'ok');
+    return 1;
+  } catch (e) {
+    $('body-github').innerHTML = `<div class="empty" style="color:var(--red)">${e.message}</div>`;
+    setInd('ind-github', 'err');
+    addLog(`GitHub ERR: ${e.message}`, 'err');
+    return 0;
+  }
+}
+function renderGitHub() {
+  if (!S.github || !S.github.repos.length) return $('body-github').innerHTML = '<div class="empty">no repos</div>';
+  $('body-github').innerHTML = S.github.repos.map(r => `
+    <div class="item">
+      <div class="item-meta">
+        <span>${fmt.date(r.updatedAt)}</span>
+        ${r.language ? `<span class="tag tag-github">${r.language}</span>` : ''}
+        <span style="color:var(--amber);font-size:9px;">★ ${r.stars}</span>
+      </div>
+      <div class="item-title"><a href="${r.url}" target="_blank" rel="noopener">${r.name}</a></div>
+      ${r.description ? `<div class="item-body">${r.description.substring(0, 100)}${r.description.length > 100 ? '…' : ''}</div>` : ''}
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  WIKIPEDIA
+// ═══════════════════════════════════════════════════════
+async function fetchWiki() {
+  loading('body-wiki', 'ind-wiki');
+  try {
+    const d = await api('/api/wikipedia');
+    S.wiki = d;
+    renderWiki();
+    setInd('ind-wiki', 'on');
+    $('ct-wiki').textContent = d.lastModified ? `upd ${fmt.date(d.lastModified)}` : 'live';
+    addLog('Wikipedia OK', 'ok');
+    return 1;
+  } catch (e) {
+    $('body-wiki').innerHTML = `<div class="empty" style="color:var(--red)">${e.message}</div>`;
+    setInd('ind-wiki', 'err');
+    addLog(`Wiki ERR: ${e.message}`, 'err');
+    return 0;
+  }
+}
+function renderWiki() {
+  if (!S.wiki) return;
+  const w = S.wiki;
+  $('body-wiki').innerHTML = `
+    <div class="item">
+      <div class="item-meta">
+        <span class="tag tag-wiki">Wikipedia</span>
+        ${w.description ? `<span>${w.description}</span>` : ''}
+      </div>
+      <div class="item-body" style="line-height:1.7;color:var(--ink);font-size:12px;padding:6px 0;">${w.extract || ''}</div>
+      ${w.url ? `<div style="margin-top:8px;"><a href="${w.url}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:9px;color:var(--amber);text-decoration:none;letter-spacing:1.5px;">READ FULL ARTICLE →</a></div>` : ''}
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  USASPENDING
+// ═══════════════════════════════════════════════════════
+async function fetchSpending() {
+  loading('body-spending', 'ind-spending');
+  try {
+    const d = await api('/api/spending');
+    S.spending = d.awards || [];
+    renderSpending();
+    setInd('ind-spending', 'on');
+    $('ct-spending').textContent = `${S.spending.length} awards`;
+    addLog(`Spending OK · ${S.spending.length}`, 'ok');
+    return S.spending.length;
+  } catch (e) {
+    $('body-spending').innerHTML = `<div class="empty" style="color:var(--red)">${e.message}</div>`;
+    setInd('ind-spending', 'err');
+    addLog(`Spending ERR: ${e.message}`, 'err');
+    return 0;
+  }
+}
+function renderSpending() {
+  if (!S.spending.length) return $('body-spending').innerHTML = '<div class="empty">no awards</div>';
+  $('body-spending').innerHTML = S.spending.map(a => `
+    <div class="item">
+      <div class="item-meta">
+        <span>${fmt.date(a.startDate)}</span>
+        <span class="tag tag-spending">${(a.agency || 'Federal').substring(0, 18)}</span>
+      </div>
+      <div class="item-title">${a.description || a.awardId || 'Contract Award'}</div>
+      <div class="item-val">${fmt.big(a.amount)}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  SEC FILINGS
+// ═══════════════════════════════════════════════════════
+async function fetchFilings() {
+  loading('body-filings', 'ind-filings');
+  try {
+    const d = await api('/api/filings');
+    S.filings = d.filings || [];
+    renderFilings();
+    setInd('ind-filings', 'on');
+    $('ct-filings').textContent = `${S.filings.length} filings`;
+    addLog(`SEC filings OK · ${S.filings.length}`, 'ok');
+    return S.filings.length;
+  } catch (e) {
+    $('body-filings').innerHTML = `<div class="empty" style="color:var(--red)">${e.message}</div>`;
+    setInd('ind-filings', 'err');
+    addLog(`Filings ERR: ${e.message}`, 'err');
+    return 0;
+  }
+}
+function renderFilings() {
+  if (!S.filings.length) return $('body-filings').innerHTML = '<div class="empty">no filings</div>';
+  $('body-filings').innerHTML = S.filings.map(f => `
+    <div class="item">
+      <div class="item-meta">
+        <span>${fmt.date(f.filingDate)}</span>
+        <span class="tag tag-filing">FORM ${f.form}</span>
+      </div>
+      <div class="item-title"><a href="${f.url}" target="_blank" rel="noopener">${f.form} · ${fmt.date(f.reportDate || f.filingDate)}</a></div>
+      <div class="item-body">SEC EDGAR · accession ${f.accessionNumber}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  INSIDER TRADES
+// ═══════════════════════════════════════════════════════
+async function fetchInsiders() {
+  loading('body-insiders', 'ind-insiders');
+  try {
+    const d = await api('/api/insiders');
+    S.insiders = d.trades || [];
+    renderInsiders();
+    setInd('ind-insiders', 'on');
+    $('ct-insiders').textContent = `${S.insiders.length} trades`;
+    addLog(`Form 4 OK · ${S.insiders.length}`, 'ok');
+    return S.insiders.length;
+  } catch (e) {
+    $('body-insiders').innerHTML = `<div class="empty" style="color:var(--red)">${e.message}</div>`;
+    setInd('ind-insiders', 'err');
+    addLog(`Insiders ERR: ${e.message}`, 'err');
+    return 0;
+  }
+}
+function renderInsiders() {
+  if (!S.insiders.length) return $('body-insiders').innerHTML = '<div class="empty">no recent insider filings</div>';
+  $('body-insiders').innerHTML = S.insiders.map(t => `
+    <div class="item">
+      <div class="item-meta">
+        <span>${fmt.date(t.filingDate)}</span>
+        <span class="tag tag-insider">FORM 4</span>
+      </div>
+      <div class="item-title"><a href="${t.url}" target="_blank" rel="noopener">Insider Transaction · ${fmt.date(t.reportDate || t.filingDate)}</a></div>
+      <div class="item-body">Click to view shares, price, type on SEC EDGAR</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  SYNC ALL
+// ═══════════════════════════════════════════════════════
+async function syncAll() {
+  const backend = getBackend();
+  localStorage.setItem('pltr_backend', backend);
+
+  const btn = $('btn-sync'), btnR = $('btn-refresh'), st = $('cfg-status');
+  btn.disabled = true;
+  btnR.disabled = true;
+  st.textContent = 'syncing 8 sources…';
+  st.style.color = 'var(--amber)';
+  addLog('Full sync · 8 sources', 'warn');
+
+  await Promise.all([
+    fetchQuote(),
+    fetchNews(),
+    fetchContracts(),
+    fetchGitHub(),
+    fetchWiki(),
+    fetchSpending(),
+    fetchFilings(),
+    fetchInsiders()
+  ]);
+
+  const now = new Date();
+  st.textContent = `synced ${now.toLocaleTimeString()}`;
+  st.style.color = 'var(--green)';
+  addLog('Sync complete · 8 feeds', 'ok');
+  btn.disabled = false;
+  btnR.disabled = false;
+}
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+function init() {
+  const saved = localStorage.getItem('pltr_backend');
+  $('backend').value = saved || DEFAULT_BACKEND;
+
+  setInterval(() => {
+    $('utc-clock').textContent = new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+  }, 1000);
+
+  $('btn-sync').addEventListener('click', syncAll);
+  $('btn-refresh').addEventListener('click', syncAll);
+
+  // Auto-refresh every 5 min
+  setInterval(() => { addLog('Auto-refresh', 'warn'); syncAll(); }, 5 * 60 * 1000);
+
+  addLog('System initialised · 8 data sources ready', 'warn');
+  setTimeout(syncAll, 600);
+}
+
+init();
+</script>
+</body>
+</html>

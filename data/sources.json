@@ -1,0 +1,115 @@
+{
+  "company": {
+    "name": "Palantir Technologies Inc.",
+    "ticker": "PLTR",
+    "exchange": "NASDAQ",
+    "founded": 2003,
+    "headquarters": "Aventura/Miami, FL (relocated from Denver, 2024)",
+    "ipo": "September 30, 2020 (direct listing)",
+    "founders": ["Peter Thiel", "Alex Karp", "Joe Lonsdale", "Stephen Cohen", "Nathan Gettings"],
+    "ceo": "Alex Karp",
+    "cik": "0001321655"
+  },
+  "products": {
+    "Gotham": {
+      "description": "Intelligence and defense platform — used by US Intelligence Community, DoD, allied militaries.",
+      "launched": 2008,
+      "use_cases": ["Counterterrorism", "Battlefield AI", "Police analytics"]
+    },
+    "Foundry": {
+      "description": "Commercial enterprise data platform — ontology layer for unifying business data.",
+      "launched": 2016,
+      "use_cases": ["Supply chain", "Manufacturing", "Healthcare", "Finance"]
+    },
+    "AIP": {
+      "description": "Artificial Intelligence Platform — orchestrates LLMs (GPT-4, Claude, Llama) over Foundry/Gotham ontology.",
+      "launched": 2023,
+      "use_cases": ["Agentic workflows", "Auditable AI", "Boot-camp deployment"]
+    },
+    "Apollo": {
+      "description": "Continuous-delivery and software-supply-chain management. Deploys Palantir products to any environment (cloud, on-prem, classified).",
+      "launched": 2021
+    }
+  },
+  "key_contracts_2025_2026": [
+    {
+      "name": "Maven Smart System — Program of Record",
+      "agency": "U.S. Department of Defense",
+      "year": 2026,
+      "value": "Multi-year program",
+      "source": "DoD memo, March 2026"
+    },
+    {
+      "name": "TITAN program (Tactical Intelligence Targeting Access Node)",
+      "agency": "U.S. Army",
+      "year": 2024,
+      "value": "$178M initial",
+      "source": "Army press release"
+    },
+    {
+      "name": "Vantage Data Platform — Army-wide expansion",
+      "agency": "U.S. Army",
+      "year": 2025,
+      "value": "Multi-year, expanding"
+    },
+    {
+      "name": "ICE Gotham — renewal & extension",
+      "agency": "U.S. Immigration and Customs Enforcement",
+      "year": 2025,
+      "value": "Renewed 2025"
+    },
+    {
+      "name": "DoD large software contract",
+      "agency": "U.S. Department of Defense",
+      "year": 2025,
+      "value": "$795M",
+      "source": "Wikipedia"
+    }
+  ],
+  "financial_metrics": [
+    {
+      "label": "Q4 2025 revenue",
+      "value": "$1.4B",
+      "yoy_growth": "70%",
+      "source": "Palantir Q4 2025 earnings release"
+    },
+    {
+      "label": "Q4 2025 US commercial revenue",
+      "value": "$507M",
+      "yoy_growth": "137%"
+    },
+    {
+      "label": "Q4 2025 total contract value (TCV)",
+      "value": "$4.3B (record)"
+    },
+    {
+      "label": "2026 revenue guidance",
+      "value": "~$2.2B implied",
+      "yoy_growth": "61%"
+    },
+    {
+      "label": "Q1 2026 earnings date",
+      "value": "May 4, 2026 (after market close)"
+    }
+  ],
+  "valuation_metrics_may_2026": {
+    "stock_price": "$144.41",
+    "market_cap": "$345.36B",
+    "pe_ratio_ttm": "227.42",
+    "ebitda_ttm": "$1.44B",
+    "revenue_ttm": "$4.475B",
+    "shares_outstanding": "2.40B",
+    "52_week_range": "$105.32 – $207.52",
+    "source": "Yahoo Finance, CNBC, Robinhood as of May 1, 2026"
+  },
+  "data_sources": [
+    { "name": "NewsAPI", "type": "keyed", "url": "https://newsapi.org" },
+    { "name": "SAM.gov Contract Opportunities", "type": "keyed", "url": "https://sam.gov" },
+    { "name": "GitHub API", "type": "open", "url": "https://api.github.com/orgs/palantir" },
+    { "name": "Wikipedia REST API", "type": "open", "url": "https://en.wikipedia.org/wiki/Palantir_Technologies" },
+    { "name": "USASpending.gov", "type": "open", "url": "https://api.usaspending.gov" },
+    { "name": "Stooq Stock Data (PLTR.US)", "type": "open", "url": "https://stooq.com/q/?s=pltr.us" },
+    { "name": "SEC EDGAR Filings", "type": "open", "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001321655" },
+    { "name": "SEC EDGAR Form 4 (Insiders)", "type": "open", "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001321655&type=4" }
+  ]
+}
