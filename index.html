@@ -9,7 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* Pure dark palette — no gradients, no neon */
   --bg:        #0a0a0a;
   --bg-2:      #111111;
   --panel:     #0f0f0f;
@@ -44,7 +43,6 @@ body {
   cursor: default;
 }
 
-/* ── film grain — very subtle ── */
 body::before {
   content: '';
   position: fixed; inset: 0;
@@ -55,7 +53,6 @@ body::before {
   z-index: 1;
 }
 
-/* hairline scanlines, barely visible */
 body::after {
   content: '';
   position: fixed; inset: 0;
@@ -65,29 +62,24 @@ body::after {
   mix-blend-mode: overlay;
 }
 
-/* ═══ ANIMATIONS ══════════════════════════════════ */
-@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeUp   { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes blink    { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+@keyframes pulse    { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+@keyframes spin     { to { transform: rotate(360deg); } }
 @keyframes scrollUp { from { transform: translateY(0); } to { transform: translateY(-50%); } }
 
-/* ═══ LAYOUT ══════════════════════════════════ */
+/* ── LAYOUT ── */
 .shell {
   position: relative;
   z-index: 10;
   max-width: 1280px;
   margin: 0 auto;
   padding: 32px 80px 32px 32px;
-  /* extra right padding for the vertical tickertape */
 }
+@media (max-width: 760px) { .shell { padding: 24px 20px; } }
 
-@media (max-width: 760px) {
-  .shell { padding: 24px 20px; }
-}
-
-/* ═══ TICKERTAPE — vertical scrolling on right edge ══════ */
+/* ── TICKERTAPE ── */
 .tape {
   position: fixed;
   right: 0; top: 0;
@@ -119,7 +111,7 @@ body::after {
 .tape-inner .up { color: var(--green); }
 .tape-inner .dn { color: var(--red); }
 
-/* ═══ TOP META BAR ═══ */
+/* ── META BAR ── */
 .meta-bar {
   display: flex;
   justify-content: space-between;
@@ -147,7 +139,7 @@ body::after {
   animation: blink 1.6s ease-in-out infinite;
 }
 
-/* ═══ HEADER / TITLE ═══ */
+/* ── TITLE ── */
 .title-block {
   margin-bottom: 40px;
   animation: fadeUp .7s ease forwards;
@@ -182,7 +174,7 @@ body::after {
   text-transform: uppercase;
 }
 
-/* ═══ ASCII RULE ═══ */
+/* ── ASCII RULE ── */
 .ascii-rule {
   font-family: var(--mono);
   font-size: 10px;
@@ -206,12 +198,9 @@ body::after {
   font-size: 9px;
   text-transform: uppercase;
 }
-.ascii-rule .diamond {
-  color: var(--amber-dim);
-  font-size: 8px;
-}
+.ascii-rule .diamond { color: var(--amber-dim); font-size: 8px; }
 
-/* ═══ STOCK HERO — the showpiece ═══ */
+/* ── STOCK HERO ── */
 .stock-hero {
   display: grid;
   grid-template-columns: 1fr 320px;
@@ -233,18 +222,13 @@ body::after {
   color: var(--ink-3);
   text-transform: uppercase;
 }
-
-@media (max-width: 760px) {
-  .stock-hero { grid-template-columns: 1fr; }
-}
+@media (max-width: 760px) { .stock-hero { grid-template-columns: 1fr; } }
 
 .hero-left {
   padding: 44px 32px 28px;
   border-right: 1px solid var(--rule);
 }
-@media (max-width: 760px) {
-  .hero-left { border-right: none; border-bottom: 1px solid var(--rule); }
-}
+@media (max-width: 760px) { .hero-left { border-right: none; border-bottom: 1px solid var(--rule); } }
 
 .price-row {
   display: flex;
@@ -262,12 +246,7 @@ body::after {
   letter-spacing: -.02em;
   font-variant-numeric: tabular-nums;
 }
-.price-change {
-  font-family: var(--mono);
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: .5px;
-}
+.price-change { font-family: var(--mono); font-size: 16px; font-weight: 500; letter-spacing: .5px; }
 .price-change.up { color: var(--green); }
 .price-change.dn { color: var(--red); }
 
@@ -288,9 +267,7 @@ body::after {
   padding-top: 22px;
   border-top: 1px solid var(--rule);
 }
-@media (max-width: 580px) {
-  .hero-stats { grid-template-columns: repeat(2, 1fr); }
-}
+@media (max-width: 580px) { .hero-stats { grid-template-columns: repeat(2, 1fr); } }
 
 .hero-stat .lbl {
   font-family: var(--mono);
@@ -300,20 +277,11 @@ body::after {
   text-transform: uppercase;
   margin-bottom: 4px;
 }
-.hero-stat .val {
-  font-family: var(--mono);
-  font-size: 14px;
-  color: var(--ink);
-  font-weight: 500;
-}
+.hero-stat .val { font-family: var(--mono); font-size: 14px; color: var(--ink); font-weight: 500; }
 .hero-stat .val.up { color: var(--green); }
 .hero-stat .val.dn { color: var(--red); }
 
-.hero-right {
-  padding: 32px 24px 24px;
-  display: flex;
-  flex-direction: column;
-}
+.hero-right { padding: 32px 24px 24px; display: flex; flex-direction: column; }
 .spark-label {
   font-family: var(--mono);
   font-size: 9px;
@@ -324,7 +292,7 @@ body::after {
 }
 .spark-svg { width: 100%; flex: 1; min-height: 120px; }
 
-/* ═══ KEY METRICS ROW ═══ */
+/* ── METRICS ROW ── */
 .metrics-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -335,9 +303,8 @@ body::after {
   animation: fadeUp .7s .25s ease forwards;
   opacity: 0;
 }
-@media (max-width: 760px) {
-  .metrics-row { grid-template-columns: repeat(2, 1fr); }
-}
+@media (max-width: 760px) { .metrics-row { grid-template-columns: repeat(2, 1fr); } }
+
 .mrow {
   padding: 22px 20px;
   border-right: 1px solid var(--rule);
@@ -364,15 +331,9 @@ body::after {
   line-height: 1;
   letter-spacing: -.015em;
 }
-.mrow .sub {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--ink-3);
-  margin-top: 6px;
-  letter-spacing: 1px;
-}
+.mrow .sub { font-family: var(--mono); font-size: 9px; color: var(--ink-3); margin-top: 6px; letter-spacing: 1px; }
 
-/* ═══ STATIC BRIEF — three columns ═══ */
+/* ── THREE-COL BRIEF ── */
 .brief {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -384,11 +345,7 @@ body::after {
 @media (max-width: 900px) { .brief { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 580px) { .brief { grid-template-columns: 1fr; } }
 
-.col {
-  border: 1px solid var(--rule);
-  background: var(--panel);
-  padding: 22px;
-}
+.col { border: 1px solid var(--rule); background: var(--panel); padding: 22px; }
 
 .col-tag {
   font-family: var(--mono);
@@ -401,11 +358,7 @@ body::after {
   align-items: center;
   gap: 6px;
 }
-.col-tag::before {
-  content: '◇';
-  color: var(--amber-dim);
-  font-size: 9px;
-}
+.col-tag::before { content: '◇'; color: var(--amber-dim); font-size: 9px; }
 
 .col h3 {
   font-family: var(--serif);
@@ -416,24 +369,10 @@ body::after {
   letter-spacing: -.005em;
 }
 
-.product {
-  padding: 11px 0;
-  border-bottom: 1px solid var(--rule);
-}
+.product { padding: 11px 0; border-bottom: 1px solid var(--rule); }
 .product:last-child { border-bottom: none; }
-.product .name {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--ink);
-  letter-spacing: .5px;
-  margin-bottom: 4px;
-}
-.product .desc {
-  font-size: 11px;
-  color: var(--ink-2);
-  line-height: 1.5;
-}
+.product .name { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--ink); letter-spacing: .5px; margin-bottom: 4px; }
+.product .desc { font-size: 11px; color: var(--ink-2); line-height: 1.5; }
 
 .contract-row {
   display: grid;
@@ -444,10 +383,7 @@ body::after {
   border-bottom: 1px solid var(--rule);
 }
 .contract-row:last-child { border-bottom: none; }
-.contract-row .name {
-  font-size: 12px;
-  color: var(--ink);
-}
+.contract-row .name { font-size: 12px; color: var(--ink); }
 .contract-row .name small {
   display: block;
   font-family: var(--mono);
@@ -457,12 +393,7 @@ body::after {
   margin-top: 2px;
   text-transform: uppercase;
 }
-.contract-row .val {
-  font-family: var(--mono);
-  font-size: 13px;
-  color: var(--amber);
-  font-weight: 500;
-}
+.contract-row .val { font-family: var(--mono); font-size: 13px; color: var(--amber); font-weight: 500; }
 
 .fin-row {
   display: grid;
@@ -478,7 +409,7 @@ body::after {
 .fin-row .val.amber { color: var(--amber); }
 .fin-row .val.green { color: var(--green); }
 
-/* ═══ BULL / BEAR ═══ */
+/* ── BULL / BEAR ── */
 .bb {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -489,80 +420,36 @@ body::after {
 }
 @media (max-width: 760px) { .bb { grid-template-columns: 1fr; } }
 
-.bb-side {
-  border: 1px solid var(--rule);
-  padding: 22px;
-}
+.bb-side { border: 1px solid var(--rule); padding: 22px; }
 .bb-bull { background: rgba(95, 207, 128, .025); border-color: rgba(95, 207, 128, .15); }
 .bb-bear { background: rgba(232, 93, 93, .025); border-color: rgba(232, 93, 93, .15); }
 
-.bb-side h4 {
-  font-family: var(--serif);
-  font-size: 18px;
-  font-weight: 500;
-  margin-bottom: 14px;
-  font-style: italic;
-}
+.bb-side h4 { font-family: var(--serif); font-size: 18px; font-weight: 500; margin-bottom: 14px; font-style: italic; }
 .bb-bull h4 { color: var(--green); }
 .bb-bear h4 { color: var(--red); }
 
 .bb-side ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
-.bb-side li {
-  font-size: 12px;
-  color: var(--ink);
-  line-height: 1.55;
-  padding-left: 16px;
-  position: relative;
-}
-.bb-side li::before {
-  content: '›';
-  position: absolute;
-  left: 0;
-  font-family: var(--mono);
-}
+.bb-side li { font-size: 12px; color: var(--ink); line-height: 1.55; padding-left: 16px; position: relative; }
+.bb-side li::before { content: '›'; position: absolute; left: 0; font-family: var(--mono); }
 .bb-bull li::before { color: var(--green); }
 .bb-bear li::before { color: var(--red); }
 
-/* ═══ LIVE FEEDS GRID ═══ */
-.feeds-1 {
+/* ── FEEDS ── */
+.feeds-1, .feeds-2, .feeds-3 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
   margin-bottom: 16px;
-  animation: fadeUp .7s .55s ease forwards;
-  opacity: 0;
 }
-.feeds-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
-  animation: fadeUp .7s .6s ease forwards;
-  opacity: 0;
-}
-.feeds-3 {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 32px;
-  animation: fadeUp .7s .65s ease forwards;
-  opacity: 0;
-}
-@media (max-width: 1100px) {
-  .feeds-1, .feeds-2, .feeds-3 { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 620px) {
-  .feeds-1, .feeds-2, .feeds-3 { grid-template-columns: 1fr; }
-}
+.feeds-1 { animation: fadeUp .7s .55s ease forwards; opacity: 0; }
+.feeds-2 { animation: fadeUp .7s .60s ease forwards; opacity: 0; }
+.feeds-3 { animation: fadeUp .7s .65s ease forwards; opacity: 0; margin-bottom: 32px; }
 
-.feed {
-  border: 1px solid var(--rule);
-  background: var(--panel);
-  display: flex;
-  flex-direction: column;
-  min-height: 320px;
-  max-height: 400px;
-}
+@media (max-width: 1100px) { .feeds-1, .feeds-2, .feeds-3 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 620px)  { .feeds-1, .feeds-2, .feeds-3 { grid-template-columns: 1fr; } }
+
+.feed { border: 1px solid var(--rule); background: var(--panel); display: flex; flex-direction: column; min-height: 320px; max-height: 400px; }
+
 .feed-head {
   padding: 12px 16px;
   border-bottom: 1px solid var(--rule);
@@ -588,31 +475,17 @@ body::after {
   transition: all .3s;
   flex-shrink: 0;
 }
-.feed-head .ind.on  { background: var(--green); box-shadow: 0 0 6px rgba(95,207,128,.5); }
-.feed-head .ind.err { background: var(--red); }
+.feed-head .ind.on   { background: var(--green); box-shadow: 0 0 6px rgba(95,207,128,.5); }
+.feed-head .ind.err  { background: var(--red); }
 .feed-head .ind.spin { background: var(--amber); animation: blink .8s ease-in-out infinite; }
+.feed-head .count { font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: 1px; }
 
-.feed-head .count {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--ink-3);
-  letter-spacing: 1px;
-}
-
-.feed-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0 16px;
-}
+.feed-body { flex: 1; overflow-y: auto; padding: 0 16px; }
 .feed-body::-webkit-scrollbar { width: 2px; }
 .feed-body::-webkit-scrollbar-track { background: transparent; }
 .feed-body::-webkit-scrollbar-thumb { background: var(--rule-bright); }
 
-.item {
-  padding: 11px 0;
-  border-bottom: 1px solid var(--rule);
-  animation: fadeIn .3s ease forwards;
-}
+.item { padding: 11px 0; border-bottom: 1px solid var(--rule); animation: fadeIn .3s ease forwards; }
 .item:last-child { border-bottom: none; }
 
 .item-meta {
@@ -627,14 +500,7 @@ body::after {
   align-items: center;
   text-transform: uppercase;
 }
-.tag {
-  font-family: var(--mono);
-  font-size: 8px;
-  padding: 1px 5px;
-  border: 1px solid;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
+.tag { font-family: var(--mono); font-size: 8px; padding: 1px 5px; border: 1px solid; letter-spacing: 1px; text-transform: uppercase; }
 .tag-news     { border-color: var(--amber); color: var(--amber); }
 .tag-contract { border-color: var(--green); color: var(--green); }
 .tag-github   { border-color: #c8c8c8; color: #c8c8c8; }
@@ -643,36 +509,11 @@ body::after {
 .tag-filing   { border-color: var(--green); color: var(--green); }
 .tag-insider  { border-color: var(--red); color: var(--red); }
 
-.item-title {
-  font-size: 12px;
-  color: var(--ink);
-  font-weight: 400;
-  line-height: 1.45;
-  margin-bottom: 4px;
-}
-.item-title a {
-  color: inherit;
-  text-decoration: none;
-  border-bottom: 1px dotted var(--ink-4);
-  transition: all .15s;
-}
-.item-title a:hover {
-  color: var(--amber);
-  border-bottom-color: var(--amber);
-}
-.item-body {
-  font-size: 11px;
-  color: var(--ink-2);
-  line-height: 1.5;
-}
-.item-val {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--amber);
-  margin-top: 4px;
-  letter-spacing: .5px;
-  font-weight: 500;
-}
+.item-title { font-size: 12px; color: var(--ink); font-weight: 400; line-height: 1.45; margin-bottom: 4px; }
+.item-title a { color: inherit; text-decoration: none; border-bottom: 1px dotted var(--ink-4); transition: all .15s; }
+.item-title a:hover { color: var(--amber); border-bottom-color: var(--amber); }
+.item-body { font-size: 11px; color: var(--ink-2); line-height: 1.5; }
+.item-val { font-family: var(--mono); font-size: 11px; color: var(--amber); margin-top: 4px; letter-spacing: .5px; font-weight: 500; }
 
 .empty {
   padding: 40px 16px;
@@ -693,24 +534,7 @@ body::after {
   margin: 0 auto 12px;
 }
 
-/* ═══ FOOTER ═══ */
-.footer {
-  border-top: 1px solid var(--rule);
-  padding: 22px 0 12px;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 2px;
-  color: var(--ink-3);
-  text-transform: uppercase;
-  animation: fadeIn 1s .8s ease forwards;
-  opacity: 0;
-}
-
-/* ═══ CONFIG INPUT ═══ */
+/* ── CONFIG ── */
 .cfg {
   margin-bottom: 24px;
   padding: 12px 16px;
@@ -723,13 +547,7 @@ body::after {
   animation: fadeIn .5s .1s ease forwards;
   opacity: 0;
 }
-.cfg-lbl {
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 2px;
-  color: var(--ink-3);
-  text-transform: uppercase;
-}
+.cfg-lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; color: var(--ink-3); text-transform: uppercase; }
 .cfg input {
   flex: 1;
   min-width: 240px;
@@ -756,34 +574,46 @@ body::after {
 }
 .cfg button:hover { background: var(--amber); color: var(--bg); }
 .cfg button:disabled { opacity: .4; cursor: not-allowed; }
-.cfg-status {
+.cfg-status { font-family: var(--mono); font-size: 9px; color: var(--ink-3); letter-spacing: 1px; }
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--rule);
+  padding: 22px 0 12px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
   font-family: var(--mono);
   font-size: 9px;
+  letter-spacing: 2px;
   color: var(--ink-3);
-  letter-spacing: 1px;
+  text-transform: uppercase;
+  animation: fadeIn 1s .8s ease forwards;
+  opacity: 0;
 }
 </style>
 </head>
 <body>
 
-<!-- ═══ VERTICAL TICKERTAPE on right edge ═══ -->
+<!-- VERTICAL TICKERTAPE -->
 <div class="tape">
   <div class="tape-inner" id="tape-inner">
     <span>PLTR · LIVE</span>
-    <span class="up">▲ +0.00</span>
+    <span class="up">▲ —</span>
     <span>NASDAQ</span>
-    <span>VOL — </span>
-    <span class="up">52WK HIGH 207.52</span>
-    <span class="dn">52WK LOW 105.32</span>
+    <span>VOL —</span>
+    <span class="up">52WK HIGH —</span>
+    <span class="dn">52WK LOW —</span>
     <span>MKTCAP 345B</span>
     <span>P/E 227</span>
     <span>EPS 0.63</span>
-    <span class="up">PLTR · LIVE</span>
-    <span class="up">▲ +0.00</span>
+    <span>PLTR · LIVE</span>
+    <span class="up">▲ —</span>
     <span>NASDAQ</span>
-    <span>VOL — </span>
-    <span class="up">52WK HIGH 207.52</span>
-    <span class="dn">52WK LOW 105.32</span>
+    <span>VOL —</span>
+    <span class="up">52WK HIGH —</span>
+    <span class="dn">52WK LOW —</span>
     <span>MKTCAP 345B</span>
     <span>P/E 227</span>
     <span>EPS 0.63</span>
@@ -792,29 +622,29 @@ body::after {
 
 <div class="shell">
 
-  <!-- ═══ META BAR ═══ -->
+  <!-- META BAR -->
   <div class="meta-bar">
     <span>INTELLIGENCE BRIEF · VOL. 01 · ISSUE 02</span>
     <span class="live"><span class="dot"></span><span id="utc-clock">— UTC</span></span>
   </div>
 
-  <!-- ═══ TITLE BLOCK ═══ -->
+  <!-- TITLE -->
   <div class="title-block">
     <div class="pre">◇ NASDAQ : PLTR · INSTITUTIONAL RESEARCH</div>
     <h1>Palantir<br><em>Technologies</em></h1>
     <div class="subtitle">// COMMERCIAL & DEFENSE AI · FOUNDED 2003 · ALEX KARP, CEO</div>
   </div>
 
-  <!-- ═══ BACKEND CONFIG ═══ -->
+  <!-- CONFIG -->
   <div class="cfg">
     <span class="cfg-lbl">BACKEND</span>
     <input type="text" id="backend" placeholder="https://palantir-backend.onrender.com">
     <button id="btn-sync">▶ SYNC</button>
     <button id="btn-refresh" disabled>↻ REFRESH</button>
-    <span class="cfg-status" id="cfg-status">Awaiting sync…</span>
+    <span class="cfg-status" id="cfg-status">Press ▶ SYNC to load all 8 sources</span>
   </div>
 
-  <!-- ═══ STOCK HERO ═══ -->
+  <!-- STOCK HERO -->
   <div class="stock-hero">
     <div class="hero-left">
       <div class="price-row">
@@ -824,81 +654,39 @@ body::after {
       <div class="price-meta" id="price-meta">// AWAITING DATA · STOOQ.COM</div>
 
       <div class="hero-stats">
-        <div class="hero-stat">
-          <div class="lbl">DAY OPEN</div>
-          <div class="val" id="day-open">—</div>
-        </div>
-        <div class="hero-stat">
-          <div class="lbl">DAY HIGH</div>
-          <div class="val" id="day-high">—</div>
-        </div>
-        <div class="hero-stat">
-          <div class="lbl">DAY LOW</div>
-          <div class="val" id="day-low">—</div>
-        </div>
-        <div class="hero-stat">
-          <div class="lbl">VOLUME</div>
-          <div class="val" id="day-vol">—</div>
-        </div>
-        <div class="hero-stat">
-          <div class="lbl">52W RANGE</div>
-          <div class="val" id="range-52w">—</div>
-        </div>
-        <div class="hero-stat">
-          <div class="lbl">30D CHANGE</div>
-          <div class="val" id="chg-30d">—</div>
-        </div>
-        <div class="hero-stat">
-          <div class="lbl">1Y CHANGE</div>
-          <div class="val" id="chg-1y">—</div>
-        </div>
-        <div class="hero-stat">
-          <div class="lbl">EARNINGS</div>
-          <div class="val" style="color:var(--amber)">May 4 2026</div>
-        </div>
+        <div class="hero-stat"><div class="lbl">DAY OPEN</div><div class="val" id="day-open">—</div></div>
+        <div class="hero-stat"><div class="lbl">DAY HIGH</div><div class="val" id="day-high">—</div></div>
+        <div class="hero-stat"><div class="lbl">DAY LOW</div><div class="val" id="day-low">—</div></div>
+        <div class="hero-stat"><div class="lbl">VOLUME</div><div class="val" id="day-vol">—</div></div>
+        <div class="hero-stat"><div class="lbl">52W RANGE</div><div class="val" id="range-52w">—</div></div>
+        <div class="hero-stat"><div class="lbl">30D CHANGE</div><div class="val" id="chg-30d">—</div></div>
+        <div class="hero-stat"><div class="lbl">1Y CHANGE</div><div class="val" id="chg-1y">—</div></div>
+        <div class="hero-stat"><div class="lbl">EARNINGS</div><div class="val" style="color:var(--amber)">May 4 2026</div></div>
       </div>
     </div>
     <div class="hero-right">
       <div class="spark-label">◇ 60-DAY PRICE</div>
       <svg class="spark-svg" id="spark" viewBox="0 0 280 140" preserveAspectRatio="none">
-        <text x="140" y="75" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#585855" letter-spacing="2">AWAITING DATA</text>
+        <text x="140" y="75" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#585855" letter-spacing="2">PRESS SYNC TO LOAD</text>
       </svg>
     </div>
   </div>
 
-  <!-- ═══ KEY METRICS ROW ═══ -->
+  <!-- METRICS ROW -->
   <div class="metrics-row">
-    <div class="mrow">
-      <div class="lbl">MARKET CAP</div>
-      <div class="val">$345B</div>
-      <div class="sub">36th MOST VALUABLE</div>
-    </div>
-    <div class="mrow">
-      <div class="lbl">P/E TTM</div>
-      <div class="val">227.4</div>
-      <div class="sub">PRICED FOR PERFECTION</div>
-    </div>
-    <div class="mrow">
-      <div class="lbl">REVENUE TTM</div>
-      <div class="val">$4.48B</div>
-      <div class="sub">+70% Q4 2025 YoY</div>
-    </div>
-    <div class="mrow">
-      <div class="lbl">2026 GUIDE</div>
-      <div class="val">~$2.2B</div>
-      <div class="sub">+61% IMPLIED</div>
-    </div>
+    <div class="mrow"><div class="lbl">MARKET CAP</div><div class="val">$345B</div><div class="sub">36th MOST VALUABLE</div></div>
+    <div class="mrow"><div class="lbl">P/E TTM</div><div class="val">227.4</div><div class="sub">PRICED FOR PERFECTION</div></div>
+    <div class="mrow"><div class="lbl">REVENUE TTM</div><div class="val">$4.48B</div><div class="sub">+70% Q4 2025 YoY</div></div>
+    <div class="mrow"><div class="lbl">2026 GUIDE</div><div class="val">~$2.2B</div><div class="sub">+61% IMPLIED</div></div>
   </div>
 
-  <!-- ═══ SECTION DIVIDER ═══ -->
+  <!-- COMPANY OVERVIEW -->
   <div class="ascii-rule">
     <span class="diamond">◇◇◇</span><span class="label">COMPANY OVERVIEW</span><span class="diamond">◇◇◇</span>
   </div>
 
-  <!-- ═══ THREE-COL STATIC BRIEF ═══ -->
+  <!-- THREE-COL BRIEF -->
   <div class="brief">
-
-    <!-- Products -->
     <div class="col">
       <div class="col-tag">SOFTWARE PLATFORMS</div>
       <h3>Product Portfolio</h3>
@@ -920,41 +708,18 @@ body::after {
       </div>
     </div>
 
-    <!-- Contracts -->
     <div class="col">
       <div class="col-tag">FEDERAL CONTRACTS</div>
       <h3>Major Awards</h3>
-      <div class="contract-row">
-        <div class="name">Maven Smart System<small>DOD · PROGRAM OF RECORD · MAR 2026</small></div>
-        <div class="val">multi-yr</div>
-      </div>
-      <div class="contract-row">
-        <div class="name">DoD large software contract<small>DEPT. OF DEFENSE · 2025</small></div>
-        <div class="val">$795M</div>
-      </div>
-      <div class="contract-row">
-        <div class="name">TITAN program<small>U.S. ARMY · 2024</small></div>
-        <div class="val">$178M</div>
-      </div>
-      <div class="contract-row">
-        <div class="name">Vantage Data Platform<small>U.S. ARMY · MULTI-YR · EXPANDING</small></div>
-        <div class="val">expanding</div>
-      </div>
-      <div class="contract-row">
-        <div class="name">Gotham — ICE renewal<small>U.S. IMMIGRATION · 2025</small></div>
-        <div class="val">renewed</div>
-      </div>
-      <div class="contract-row">
-        <div class="name">DHS / Pentagon contracts (existing)<small>VARIOUS · 2025</small></div>
-        <div class="val">$113M</div>
-      </div>
-      <div class="contract-row">
-        <div class="name">NHS data platform<small>UK · ONGOING</small></div>
-        <div class="val">$330M+</div>
-      </div>
+      <div class="contract-row"><div class="name">Maven Smart System<small>DOD · PROGRAM OF RECORD · MAR 2026</small></div><div class="val">multi-yr</div></div>
+      <div class="contract-row"><div class="name">DoD large software contract<small>DEPT. OF DEFENSE · 2025</small></div><div class="val">$795M</div></div>
+      <div class="contract-row"><div class="name">TITAN program<small>U.S. ARMY · 2024</small></div><div class="val">$178M</div></div>
+      <div class="contract-row"><div class="name">Vantage Data Platform<small>U.S. ARMY · MULTI-YR · EXPANDING</small></div><div class="val">expanding</div></div>
+      <div class="contract-row"><div class="name">Gotham — ICE renewal<small>U.S. IMMIGRATION · 2025</small></div><div class="val">renewed</div></div>
+      <div class="contract-row"><div class="name">DHS / Pentagon contracts<small>VARIOUS · 2025</small></div><div class="val">$113M</div></div>
+      <div class="contract-row"><div class="name">NHS data platform<small>UK · ONGOING</small></div><div class="val">$330M+</div></div>
     </div>
 
-    <!-- Financials -->
     <div class="col">
       <div class="col-tag">FINANCIAL METRICS</div>
       <h3>By the Numbers</h3>
@@ -972,7 +737,7 @@ body::after {
     </div>
   </div>
 
-  <!-- ═══ BULL / BEAR ═══ -->
+  <!-- INVESTMENT THESIS -->
   <div class="ascii-rule">
     <span class="diamond">◇◇◇</span><span class="label">INVESTMENT THESIS</span><span class="diamond">◇◇◇</span>
   </div>
@@ -1004,89 +769,70 @@ body::after {
     </div>
   </div>
 
-  <!-- ═══ LIVE FEEDS — 8 sources ═══ -->
+  <!-- LIVE FEEDS -->
   <div class="ascii-rule">
     <span class="diamond">◇◇◇</span><span class="label">LIVE INTELLIGENCE FEEDS · 8 SOURCES</span><span class="diamond">◇◇◇</span>
   </div>
 
-  <!-- Row 1: News · Filings · Insiders -->
+  <!-- Row 1 -->
   <div class="feeds-1">
     <div class="feed">
       <div class="feed-head">
         <div class="lbl"><span class="ind" id="ind-news"></span>BREAKING NEWS</div>
         <span class="count" id="ct-news">—</span>
       </div>
-      <div class="feed-body" id="body-news">
-        <div class="empty">Awaiting sync…</div>
-      </div>
+      <div class="feed-body" id="body-news"><div class="empty">Press ▶ SYNC to load</div></div>
     </div>
-
     <div class="feed">
       <div class="feed-head">
         <div class="lbl"><span class="ind" id="ind-filings"></span>SEC FILINGS</div>
         <span class="count" id="ct-filings">—</span>
       </div>
-      <div class="feed-body" id="body-filings">
-        <div class="empty">Awaiting sync…</div>
-      </div>
+      <div class="feed-body" id="body-filings"><div class="empty">Press ▶ SYNC to load</div></div>
     </div>
-
     <div class="feed">
       <div class="feed-head">
         <div class="lbl"><span class="ind" id="ind-insiders"></span>INSIDER TRADES · FORM 4</div>
         <span class="count" id="ct-insiders">—</span>
       </div>
-      <div class="feed-body" id="body-insiders">
-        <div class="empty">Awaiting sync…</div>
-      </div>
+      <div class="feed-body" id="body-insiders"><div class="empty">Press ▶ SYNC to load</div></div>
     </div>
   </div>
 
-  <!-- Row 2: Contracts · Spending · GitHub -->
+  <!-- Row 2 -->
   <div class="feeds-2">
     <div class="feed">
       <div class="feed-head">
         <div class="lbl"><span class="ind" id="ind-contracts"></span>SAM.GOV OPPORTUNITIES</div>
         <span class="count" id="ct-contracts">—</span>
       </div>
-      <div class="feed-body" id="body-contracts">
-        <div class="empty">Awaiting sync…</div>
-      </div>
+      <div class="feed-body" id="body-contracts"><div class="empty">Press ▶ SYNC to load</div></div>
     </div>
-
     <div class="feed">
       <div class="feed-head">
         <div class="lbl"><span class="ind" id="ind-spending"></span>USASPENDING.GOV AWARDS</div>
         <span class="count" id="ct-spending">—</span>
       </div>
-      <div class="feed-body" id="body-spending">
-        <div class="empty">Awaiting sync…</div>
-      </div>
+      <div class="feed-body" id="body-spending"><div class="empty">Press ▶ SYNC to load</div></div>
     </div>
-
     <div class="feed">
       <div class="feed-head">
         <div class="lbl"><span class="ind" id="ind-github"></span>GITHUB · PALANTIR</div>
         <span class="count" id="ct-github">—</span>
       </div>
-      <div class="feed-body" id="body-github">
-        <div class="empty">Awaiting sync…</div>
-      </div>
+      <div class="feed-body" id="body-github"><div class="empty">Press ▶ SYNC to load</div></div>
     </div>
   </div>
 
-  <!-- Row 3: Wikipedia · Activity Log · spare -->
+  <!-- Row 3 -->
   <div class="feeds-3">
     <div class="feed">
       <div class="feed-head">
         <div class="lbl"><span class="ind" id="ind-wiki"></span>WIKIPEDIA · LIVE EXTRACT</div>
         <span class="count" id="ct-wiki">—</span>
       </div>
-      <div class="feed-body" id="body-wiki">
-        <div class="empty">Awaiting sync…</div>
-      </div>
+      <div class="feed-body" id="body-wiki"><div class="empty">Press ▶ SYNC to load</div></div>
     </div>
-
     <div class="feed">
       <div class="feed-head">
         <div class="lbl"><span class="ind on"></span>ACTIVITY LOG</div>
@@ -1094,7 +840,6 @@ body::after {
       </div>
       <div class="feed-body" id="body-log"></div>
     </div>
-
     <div class="feed">
       <div class="feed-head">
         <div class="lbl"><span class="ind on"></span>DATA PROVENANCE</div>
@@ -1117,10 +862,10 @@ body::after {
     </div>
   </div>
 
-  <!-- ═══ FOOTER ═══ -->
+  <!-- FOOTER -->
   <div class="footer">
     <span>PALANTIR TECHNOLOGIES INC · NASDAQ : PLTR · CIK 0001321655</span>
-    <span>NOT FINANCIAL ADVICE · AUTO-REFRESH 5 MIN · STOCK 5 MIN · WIKI 6 HR</span>
+    <span>NOT FINANCIAL ADVICE · MANUAL SYNC · STOCK 5 MIN · WIKI 6 HR</span>
   </div>
 
 </div><!-- /shell -->
@@ -1139,7 +884,7 @@ const DEFAULT_BACKEND = 'https://palantir-backend.onrender.com';
 //  HELPERS
 // ═══════════════════════════════════════════════════════
 const ts = () => new Date().toLocaleTimeString();
-const $ = id => document.getElementById(id);
+const $  = id => document.getElementById(id);
 
 function addLog(msg, type = 'info') {
   S.log.unshift({ time: ts(), msg, type });
@@ -1179,8 +924,7 @@ function getBackend() {
 }
 
 async function api(endpoint) {
-  const url = `${getBackend()}${endpoint}`;
-  const r = await fetch(url);
+  const r = await fetch(`${getBackend()}${endpoint}`);
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
   return r.json();
 }
@@ -1194,13 +938,13 @@ const fmt = {
     if (n >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
     return '$' + n.toFixed(0);
   },
-  pct:   n => n == null ? '—' : (n >= 0 ? '+' : '') + n.toFixed(2) + '%',
-  vol:   n => n == null ? '—' : (n/1e6).toFixed(1) + 'M',
-  date:  s => s ? new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'
+  pct:  n => n == null ? '—' : (n >= 0 ? '+' : '') + n.toFixed(2) + '%',
+  vol:  n => n == null ? '—' : (n/1e6).toFixed(1) + 'M',
+  date: s => s ? new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'
 };
 
 // ═══════════════════════════════════════════════════════
-//  STOCK QUOTE — the showpiece
+//  STOCK QUOTE
 // ═══════════════════════════════════════════════════════
 async function fetchQuote() {
   addLog('Fetching live PLTR quote…', 'warn');
@@ -1218,29 +962,26 @@ async function fetchQuote() {
 
 function renderQuote(d) {
   const up = d.change.oneDay >= 0;
-  $('price-big').textContent = '$' + d.latest.price.toFixed(2);
-  $('price-change').className = 'price-change ' + (up ? 'up' : 'dn');
+  $('price-big').textContent    = '$' + d.latest.price.toFixed(2);
+  $('price-change').className   = 'price-change ' + (up ? 'up' : 'dn');
   $('price-change').textContent = `${up ? '▲' : '▼'} ${d.change.oneDay >= 0 ? '+' : ''}${d.change.oneDay.toFixed(2)} · ${fmt.pct(d.change.oneDayPct)}`;
-  $('price-meta').textContent = `// AS OF ${fmt.date(d.latest.date)} · STOOQ.COM · CACHED 5 MIN`;
+  $('price-meta').textContent   = `// AS OF ${fmt.date(d.latest.date)} · STOOQ.COM · CACHED 5 MIN`;
 
-  $('day-open').textContent = '$' + d.latest.open.toFixed(2);
-  $('day-high').textContent = '$' + d.latest.high.toFixed(2);
-  $('day-low').textContent = '$' + d.latest.low.toFixed(2);
-  $('day-vol').textContent = fmt.vol(d.latest.volume);
+  $('day-open').textContent  = '$' + d.latest.open.toFixed(2);
+  $('day-high').textContent  = '$' + d.latest.high.toFixed(2);
+  $('day-low').textContent   = '$' + d.latest.low.toFixed(2);
+  $('day-vol').textContent   = fmt.vol(d.latest.volume);
   $('range-52w').textContent = `$${d.range52w.low.toFixed(0)}—$${d.range52w.high.toFixed(0)}`;
 
   const c30 = $('chg-30d');
   c30.textContent = fmt.pct(d.change.thirtyDayPct);
-  c30.className = 'val ' + (d.change.thirtyDayPct >= 0 ? 'up' : 'dn');
+  c30.className   = 'val ' + (d.change.thirtyDayPct >= 0 ? 'up' : 'dn');
 
   const c1y = $('chg-1y');
   c1y.textContent = fmt.pct(d.change.oneYearPct);
-  c1y.className = 'val ' + (d.change.oneYearPct >= 0 ? 'up' : 'dn');
+  c1y.className   = 'val ' + (d.change.oneYearPct >= 0 ? 'up' : 'dn');
 
-  // Sparkline SVG
   drawSparkline(d.history);
-
-  // Update tickertape with real values
   updateTickertape(d);
 }
 
@@ -1249,9 +990,9 @@ function drawSparkline(history) {
   if (!history || history.length < 2) return;
   const W = 280, H = 140, P = 12;
   const closes = history.map(h => h.close);
-  const min = Math.min(...closes);
-  const max = Math.max(...closes);
-  const range = max - min || 1;
+  const min    = Math.min(...closes);
+  const max    = Math.max(...closes);
+  const range  = max - min || 1;
 
   const points = history.map((h, i) => {
     const x = P + (i / (history.length - 1)) * (W - 2 * P);
@@ -1262,7 +1003,7 @@ function drawSparkline(history) {
   const linePath = points.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
   const areaPath = linePath + ` L${points[points.length-1][0].toFixed(1)},${H-P} L${points[0][0].toFixed(1)},${H-P} Z`;
 
-  const up = closes[closes.length - 1] >= closes[0];
+  const up    = closes[closes.length - 1] >= closes[0];
   const color = up ? '#5fcf80' : '#e85d5d';
 
   svg.innerHTML = `
@@ -1277,16 +1018,15 @@ function drawSparkline(history) {
     <path d="${linePath}" stroke="${color}" stroke-width="1.5" fill="none"/>
     <circle cx="${points[points.length-1][0].toFixed(1)}" cy="${points[points.length-1][1].toFixed(1)}" r="3" fill="${color}"/>
     <text x="${P}" y="${H-2}" font-family="JetBrains Mono" font-size="8" fill="#585855">$${min.toFixed(0)}</text>
-    <text x="${P}" y="${P+6}" font-family="JetBrains Mono" font-size="8" fill="#585855">$${max.toFixed(0)}</text>
-  `;
+    <text x="${P}" y="${P+6}" font-family="JetBrains Mono" font-size="8" fill="#585855">$${max.toFixed(0)}</text>`;
 }
 
 function updateTickertape(d) {
   const change = d.change.oneDay;
-  const up = change >= 0;
-  const arrow = up ? '▲' : '▼';
-  const cls = up ? 'up' : 'dn';
-  const items = [
+  const up     = change >= 0;
+  const arrow  = up ? '▲' : '▼';
+  const cls    = up ? 'up' : 'dn';
+  const items  = [
     `<span>PLTR · $${d.latest.price.toFixed(2)}</span>`,
     `<span class="${cls}">${arrow} ${change >= 0 ? '+' : ''}${change.toFixed(2)}</span>`,
     `<span class="${cls}">${fmt.pct(d.change.oneDayPct)} · 1D</span>`,
@@ -1298,7 +1038,6 @@ function updateTickertape(d) {
     `<span>MKTCAP $345B</span>`,
     `<span>P/E 227</span>`
   ];
-  // Duplicate for seamless scroll
   $('tape-inner').innerHTML = items.concat(items).join('');
 }
 
@@ -1308,8 +1047,8 @@ function updateTickertape(d) {
 async function fetchNews() {
   loading('body-news', 'ind-news');
   try {
-    const d = await api('/api/news');
-    S.news = d.articles || [];
+    const d  = await api('/api/news');
+    S.news   = d.articles || [];
     renderNews();
     setInd('ind-news', 'on');
     $('ct-news').textContent = `${S.news.length} articles`;
@@ -1323,7 +1062,7 @@ async function fetchNews() {
   }
 }
 function renderNews() {
-  if (!S.news.length) return $('body-news').innerHTML = '<div class="empty">no articles</div>';
+  if (!S.news.length) { $('body-news').innerHTML = '<div class="empty">no articles</div>'; return; }
   $('body-news').innerHTML = S.news.map(a => `
     <div class="item">
       <div class="item-meta">
@@ -1341,8 +1080,8 @@ function renderNews() {
 async function fetchContracts() {
   loading('body-contracts', 'ind-contracts');
   try {
-    const d = await api('/api/contracts');
-    S.contracts = d.opportunities || [];
+    const d      = await api('/api/contracts');
+    S.contracts  = d.opportunities || [];
     renderContracts();
     setInd('ind-contracts', 'on');
     $('ct-contracts').textContent = `${S.contracts.length} opps`;
@@ -1356,7 +1095,7 @@ async function fetchContracts() {
   }
 }
 function renderContracts() {
-  if (!S.contracts.length) return $('body-contracts').innerHTML = '<div class="empty">no opportunities</div>';
+  if (!S.contracts.length) { $('body-contracts').innerHTML = '<div class="empty">no opportunities</div>'; return; }
   $('body-contracts').innerHTML = S.contracts.map(o => `
     <div class="item">
       <div class="item-meta">
@@ -1374,8 +1113,8 @@ function renderContracts() {
 async function fetchGitHub() {
   loading('body-github', 'ind-github');
   try {
-    const d = await api('/api/github');
-    S.github = d;
+    const d   = await api('/api/github');
+    S.github  = d;
     renderGitHub();
     setInd('ind-github', 'on');
     $('ct-github').textContent = `${(d.repos || []).length} repos`;
@@ -1389,7 +1128,7 @@ async function fetchGitHub() {
   }
 }
 function renderGitHub() {
-  if (!S.github || !S.github.repos.length) return $('body-github').innerHTML = '<div class="empty">no repos</div>';
+  if (!S.github || !S.github.repos.length) { $('body-github').innerHTML = '<div class="empty">no repos</div>'; return; }
   $('body-github').innerHTML = S.github.repos.map(r => `
     <div class="item">
       <div class="item-meta">
@@ -1408,8 +1147,8 @@ function renderGitHub() {
 async function fetchWiki() {
   loading('body-wiki', 'ind-wiki');
   try {
-    const d = await api('/api/wikipedia');
-    S.wiki = d;
+    const d  = await api('/api/wikipedia');
+    S.wiki   = d;
     renderWiki();
     setInd('ind-wiki', 'on');
     $('ct-wiki').textContent = d.lastModified ? `upd ${fmt.date(d.lastModified)}` : 'live';
@@ -1442,8 +1181,8 @@ function renderWiki() {
 async function fetchSpending() {
   loading('body-spending', 'ind-spending');
   try {
-    const d = await api('/api/spending');
-    S.spending = d.awards || [];
+    const d      = await api('/api/spending');
+    S.spending   = d.awards || [];
     renderSpending();
     setInd('ind-spending', 'on');
     $('ct-spending').textContent = `${S.spending.length} awards`;
@@ -1457,7 +1196,7 @@ async function fetchSpending() {
   }
 }
 function renderSpending() {
-  if (!S.spending.length) return $('body-spending').innerHTML = '<div class="empty">no awards</div>';
+  if (!S.spending.length) { $('body-spending').innerHTML = '<div class="empty">no awards</div>'; return; }
   $('body-spending').innerHTML = S.spending.map(a => `
     <div class="item">
       <div class="item-meta">
@@ -1475,8 +1214,8 @@ function renderSpending() {
 async function fetchFilings() {
   loading('body-filings', 'ind-filings');
   try {
-    const d = await api('/api/filings');
-    S.filings = d.filings || [];
+    const d    = await api('/api/filings');
+    S.filings  = d.filings || [];
     renderFilings();
     setInd('ind-filings', 'on');
     $('ct-filings').textContent = `${S.filings.length} filings`;
@@ -1490,7 +1229,7 @@ async function fetchFilings() {
   }
 }
 function renderFilings() {
-  if (!S.filings.length) return $('body-filings').innerHTML = '<div class="empty">no filings</div>';
+  if (!S.filings.length) { $('body-filings').innerHTML = '<div class="empty">no filings</div>'; return; }
   $('body-filings').innerHTML = S.filings.map(f => `
     <div class="item">
       <div class="item-meta">
@@ -1508,8 +1247,8 @@ function renderFilings() {
 async function fetchInsiders() {
   loading('body-insiders', 'ind-insiders');
   try {
-    const d = await api('/api/insiders');
-    S.insiders = d.trades || [];
+    const d      = await api('/api/insiders');
+    S.insiders   = d.trades || [];
     renderInsiders();
     setInd('ind-insiders', 'on');
     $('ct-insiders').textContent = `${S.insiders.length} trades`;
@@ -1523,7 +1262,7 @@ async function fetchInsiders() {
   }
 }
 function renderInsiders() {
-  if (!S.insiders.length) return $('body-insiders').innerHTML = '<div class="empty">no recent insider filings</div>';
+  if (!S.insiders.length) { $('body-insiders').innerHTML = '<div class="empty">no recent insider filings</div>'; return; }
   $('body-insiders').innerHTML = S.insiders.map(t => `
     <div class="item">
       <div class="item-meta">
@@ -1542,8 +1281,11 @@ async function syncAll() {
   const backend = getBackend();
   localStorage.setItem('pltr_backend', backend);
 
-  const btn = $('btn-sync'), btnR = $('btn-refresh'), st = $('cfg-status');
-  btn.disabled = true;
+  const btn  = $('btn-sync');
+  const btnR = $('btn-refresh');
+  const st   = $('cfg-status');
+
+  btn.disabled  = true;
   btnR.disabled = true;
   st.textContent = 'syncing 8 sources…';
   st.style.color = 'var(--amber)';
@@ -1561,32 +1303,46 @@ async function syncAll() {
   ]);
 
   const now = new Date();
-  st.textContent = `synced ${now.toLocaleTimeString()}`;
+  st.textContent = `synced ${now.toLocaleTimeString()} · press ↻ to refresh`;
   st.style.color = 'var(--green)';
   addLog('Sync complete · 8 feeds', 'ok');
-  btn.disabled = false;
+  btn.disabled  = false;
   btnR.disabled = false;
 }
 
 // ═══════════════════════════════════════════════════════
-//  INIT
+//  INIT — NO AUTO-SYNC ON LOAD
 // ═══════════════════════════════════════════════════════
 function init() {
+  // Restore saved backend URL (but do NOT auto-sync)
   const saved = localStorage.getItem('pltr_backend');
   $('backend').value = saved || DEFAULT_BACKEND;
 
+  // UTC clock
   setInterval(() => {
     $('utc-clock').textContent = new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
   }, 1000);
 
-  $('btn-sync').addEventListener('click', syncAll);
-  $('btn-refresh').addEventListener('click', syncAll);
+  // Buttons — set _synced flag so auto-refresh only runs after manual sync
+  $('btn-sync').addEventListener('click', () => {
+    window._synced = true;
+    $('btn-refresh').disabled = false;
+    syncAll();
+  });
+  $('btn-refresh').addEventListener('click', () => {
+    syncAll();
+  });
 
-  // Auto-refresh every 5 min
-  setInterval(() => { addLog('Auto-refresh', 'warn'); syncAll(); }, 5 * 60 * 1000);
+  // Auto-refresh every 5 min ONLY after user has manually synced at least once
+  setInterval(() => {
+    if (window._synced) {
+      addLog('Auto-refresh triggered', 'warn');
+      syncAll();
+    }
+  }, 5 * 60 * 1000);
 
   addLog('System initialised · 8 data sources ready', 'warn');
-  setTimeout(syncAll, 600);
+  addLog('Press ▶ SYNC to load all feeds', 'info');
 }
 
 init();
